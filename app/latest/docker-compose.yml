@@ -1,0 +1,35 @@
+version: '2'
+services:
+  melisdocker:
+    build: .
+    container_name: melisdocker
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/app:rw
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - MYSQL_ADDON_DB=melisv2
+      - MYSQL_ADDON_HOST=db
+      - MYSQL_ADDON_USER=root
+      - MYSQL_ADDON_PASSWORD=root
+    networks:
+      - front
+      - back
+  db:
+    image: mysql:latest
+    container_name: mysqlmelis
+    restart: always
+    ports:
+      - 3307:3307
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    networks:
+      - back
+networks:
+  front: 
+  back:
